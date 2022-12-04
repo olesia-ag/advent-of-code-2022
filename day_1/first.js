@@ -29,13 +29,22 @@
 
 // Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 
-// import { readFile } from 'node:fs/promises';
+//PART TWO
+// By the time you calculate the answer to the Elves' question, they've already realized that the Elf carrying the most Calories of food might eventually run out of snacks.
+
+// To avoid this unacceptable situation, the Elves would instead like to know the total Calories carried by the top three Elves carrying the most Calories. That way, even if one of those Elves runs out of snacks, they still have two backups.
+
+// In the example above, the top three Elves are the fourth Elf (with 24000 Calories), then the third Elf (with 11000 Calories), then the fifth Elf (with 10000 Calories). The sum of the Calories carried by these three elves is 45000.
+
+// Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
 var fs = require('fs');
 
 fs.readFile('./first_input.txt', 'utf8', function (err, data) {
 	if (err) throw err;
 	let arr = data.split('\n');
-	console.log(count(arr));
+	let firstMax = count(arr);
+	console.log(firstMax)
+	countRecursevly(arr, firstMax, 0, firstMax);
 	return;
 });
 
@@ -51,4 +60,26 @@ function count(records) {
 		}
 	}
 	return maxFound;
+}
+
+//part two:
+
+function countRecursevly(records, max, counter, total) {
+	if (counter == 2) {
+		console.log('total', total);
+		return;
+	}
+	let maxFound = 0;
+	let count = 0;
+	for (let i = 0; i < records.length; i++) {
+		if (records[i] != '') {
+			count += parseInt(records[i]);
+		} else {
+			maxFound = maxFound < count && count < max ? count : maxFound
+			count = 0;
+		}
+	}
+	counter += 1;
+	total += maxFound;
+	countRecursevly(records, maxFound, counter, total);
 }
