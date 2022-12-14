@@ -18,7 +18,8 @@ function parseData(arr) {
 			stackStacks(arr[i]);
 		}
 	}
-	parseInstructions(directions);
+	// moveStacksByOne(directions);
+	moveStacksByMultiple(directions);
 	findTop(stacks);
 }
 
@@ -35,7 +36,8 @@ function stackStacks(row) {
 	}
 }
 
-function parseInstructions(directions) {
+//refactor later - split functions logic
+function moveStacksByOne(directions) {
 	for (let i = 0; i < directions.length; i++) {
 		let instructions = directions[i].split(' ');
 		let howManyToMove = instructions[1];
@@ -43,13 +45,13 @@ function parseInstructions(directions) {
 		let toStack = instructions[5];
 		for (let j = 1; j <= howManyToMove; j++) {
 			//now we move:
-
 			let popped = stacks[`stack${fromStack}`].pop();
 			stacks[`stack${toStack}`].push(popped);
 		}
 	}
 }
 
+//change later
 function findTop(stacks) {
 	let i = 1;
 	while (i < 10) {
@@ -60,5 +62,20 @@ function findTop(stacks) {
 			stacks[`stack${i}`][stacks[`stack${i}`].length - 1]
 		);
 		i++;
+	}
+}
+
+//question 2
+
+function moveStacksByMultiple(directions) {
+	for (let i = 0; i < directions.length; i++) {
+		let instructions = directions[i].split(' ');
+		let howManyToMove = instructions[1];
+		let fromStack = instructions[3];
+		let toStack = instructions[5];
+		let splicePoint = stacks[`stack${fromStack}`].length - howManyToMove;
+		let popped = stacks[`stack${fromStack}`].splice(splicePoint);
+
+		stacks[`stack${toStack}`] = stacks[`stack${toStack}`].concat(popped);
 	}
 }
